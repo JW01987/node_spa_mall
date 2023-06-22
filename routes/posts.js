@@ -63,11 +63,17 @@ router.put("/post", authMiddleware, async (req, res) => {
       .status(404)
       .json({ success: false, msg: "내용이나 제목을 추가해 주세요." });
   }
-  const checkPostId = await Post.findOne({ postId });
-  if (checkPostId.nickname !== nickname) {
+  try {
+    const checkPostId = await Post.findOne({ postId });
+    if (checkPostId.nickname !== nickname) {
+      return res
+        .status(404)
+        .json({ success: false, msg: "작성자만 수정 할 수 있습니다." });
+    }
+  } catch {
     return res
       .status(404)
-      .json({ success: false, msg: "작성자만 수정 할 수 있습니다." });
+      .json({ success: false, msg: "게시글을 찾을 수 없습니다." });
   }
   await Post.findOneAndUpdate(
     { postId, nickname },
@@ -78,14 +84,20 @@ router.put("/post", authMiddleware, async (req, res) => {
 });
 
 //게시글 삭제
-router.delete("/post", authMiddleware, async (req, res) => {
+router.delete("/post/:postId", authMiddleware, async (req, res) => {
   const { postId } = req.params;
   const { nickname } = res.locals.user;
-  const checkPostId = await Post.findOne({ postId });
-  if (checkPostId.nickname !== nickname) {
+  try {
+    const checkPostId = await Post.findOne({ postId });
+    if (checkPostId.nickname !== nickname) {
+      return res
+        .status(404)
+        .json({ success: false, msg: "작성자만 삭제 할 수 있습니다." });
+    }
+  } catch {
     return res
       .status(404)
-      .json({ success: false, msg: "작성자만 삭제 할 수 있습니다." });
+      .json({ success: false, msg: "게시글을 찾을 수 없습니다." });
   }
   await Post.findOneAndDelete({ postId, nickname });
   res.status(200).json({ success: true, msg: "게시글이 삭제되었습니다." });

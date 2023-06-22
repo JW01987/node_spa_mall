@@ -14,6 +14,10 @@ const commentSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  nickname: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     default: new Date(new Date().getTime() + 1000 * 60 * 60 * 9),
