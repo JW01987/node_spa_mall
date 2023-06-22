@@ -16,7 +16,7 @@ router.post("/users", async (req, res) => {
     });
     return;
   }
-  if (password.length <= 4 && password.includes(nickname)) {
+  if (password.length <= 4 || password.includes(nickname)) {
     res.status(400).json({
       errorMessage: "비밀번호는 4자 이상, 닉네임을 포함할 수 없습니다.",
     });
