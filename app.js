@@ -1,12 +1,14 @@
 const express = require("express");
 const app = express();
 const port = 3000;
-const commentRouter = require("./routes/comments");
-const postRouter = require("./routes/posts");
 const connect = require("./schemas");
-const usersRouter = require("./routes/users.js");
-const authRouter = require("./routes/auth.js");
 const cookieParser = require("cookie-parser");
+const {
+  authRouter,
+  commentRouter,
+  postRouter,
+  usersRouter,
+} = require("./routes");
 connect();
 
 app.use(express.json());
